@@ -1,0 +1,19 @@
+{
+  "name": "rishabh-infotech-frontend",
+  "version": "1.0.0",
+  "description": "Production EdTech Frontend Application for Java Full Stack Career Progression",
+  "author": "RishabhInfoTech",
+  "license": "MIT",
+  "scripts": {
+    "start": "python3 -m http.server 3000",
+    "dev": "python3 -m http.server 3000"
+  },
+  "keywords": [
+    "edtech",
+    "java",
+    "full-stack",
+    "spring-boot",
+    "react",
+    "education"
+  ]
+}

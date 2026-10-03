@@ -1,0 +1,2087 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RishabhInfoTech — Java Full Stack EdTech Platform</title>
+  <!-- Tailwind CSS Engine -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              obsidian: '#0A1128',
+              navy: '#0F172A',
+              card: '#131D38',
+              cardLight: '#FFFFFF',
+              surface: '#1E293B',
+              primary: '#0062FF',
+              cyan: '#00D4FF',
+              cyanHover: '#00B8E6',
+              accent: '#38BDF8',
+              border: '#1E2D52',
+              borderLight: '#E2E8F0',
+              muted: '#94A3B8'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'Courier New', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    code, pre {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0A1128;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1E2D52;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00D4FF;
+    }
+    .badge-glow {
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.25);
+    }
+    .card-hover {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px -10px rgba(0, 98, 255, 0.2);
+    }
+  </style>
+</head>
+<body class="bg-[#0A1128] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-[#00D4FF]/30 selection:text-[#00D4FF]">
+
+  <!-- Global Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none flex items-center gap-3 bg-[#131D38] border border-[#00D4FF]/40 text-white px-5 py-3.5 rounded-xl shadow-2xl">
+    <div id="toast-icon" class="text-[#00D4FF]">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+    </div>
+    <div id="toast-message" class="text-sm font-medium">Notification message</div>
+  </div>
+
+  <!-- TOP NAVIGATION HEADER -->
+  <header class="sticky top-0 z-40 bg-[#0A1128]/90 backdrop-blur-md border-b border-[#1E2D52]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo Lockup -->
+      <a href="javascript:void(0)" onclick="navigateTo('landing')" class="flex items-center gap-3 group focus:outline-none">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#0062FF] to-[#00D4FF] p-[2px] shadow-lg shadow-[#0062FF]/20 group-hover:scale-105 transition-transform">
+          <div class="w-full h-full bg-[#0A1128] rounded-[10px] flex items-center justify-center">
+            <!-- Monogram R SVG -->
+            <svg class="w-6 h-6" viewBox="0 0 40 40" fill="none">
+              <!-- Book spine -->
+              <path d="M10 32V8C13 8 16 7 18 6V30C16 31 13 32 10 32Z" fill="url(#navGrad)" />
+              <!-- R loop -->
+              <path d="M18 6C24 6 30 9 30 16C30 22 24 24 18 24V18C22 18 25 17 25 16C25 13 21 11 18 11Z" fill="url(#navGrad)" />
+              <!-- Step Arrow -->
+              <path d="M18 23L23 23L23 19L28 19L33 13L29 12L34 11L34 16L31 15L26 21L21 21L21 26L18 26Z" fill="#00D4FF" />
+              <!-- Leg -->
+              <path d="M22 24L31 34H25L18 26Z" fill="#0062FF" />
+              <defs>
+                <linearGradient id="navGrad" x1="10" y1="32" x2="34" y2="6" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0062FF"/>
+                  <stop offset="1" stop-color="#00D4FF"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-lg font-black tracking-tight flex items-center">
+            <span class="text-white">RISHABH</span>
+            <span class="text-[#00D4FF] font-medium ml-1">INFOTECH</span>
+          </span>
+          <span class="text-[10px] font-semibold text-slate-400 tracking-widest uppercase -mt-1">Java Full Stack EdTech</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Items -->
+      <nav class="hidden lg:flex items-center gap-1 xl:gap-2">
+        <button onclick="navigateTo('landing')" id="nav-btn-landing" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Home</button>
+        <button onclick="navigateTo('roadmap')" id="nav-btn-roadmap" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors flex items-center gap-1.5">
+          <span>Roadmap</span>
+          <span class="text-[10px] bg-[#00D4FF]/20 text-[#00D4FF] px-1.5 py-0.5 rounded font-bold">23 Steps</span>
+        </button>
+        <button onclick="navigateTo('course')" id="nav-btn-course" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Courses</button>
+        <button onclick="navigateTo('lesson')" id="nav-btn-lesson" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Learning Room</button>
+        <button onclick="navigateTo('practice')" id="nav-btn-practice" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors flex items-center gap-1">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Practice IDE</span>
+        </button>
+        <button onclick="navigateTo('quiz')" id="nav-btn-quiz" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Quizzes</button>
+        <button onclick="navigateTo('projects')" id="nav-btn-projects" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Projects</button>
+        <button onclick="navigateTo('dashboard')" id="nav-btn-dashboard" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Dashboard</button>
+        <button onclick="navigateTo('analytics')" id="nav-btn-analytics" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Analytics</button>
+        <button onclick="navigateTo('certificates')" id="nav-btn-certificates" class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-[#131D38] transition-colors">Certificates</button>
+      </nav>
+
+      <!-- Right User Controls -->
+      <div class="flex items-center gap-3">
+        <!-- Streak Indicator -->
+        <div class="hidden sm:flex items-center gap-1.5 bg-[#131D38] border border-amber-500/30 px-2.5 py-1 rounded-full text-xs font-semibold text-amber-400">
+          <span>🔥</span>
+          <span id="streak-counter">14 Day Streak</span>
+        </div>
+
+        <!-- Student Profile Avatar Button -->
+        <button onclick="navigateTo('profile')" class="flex items-center gap-2 p-1 pl-1.5 pr-2 rounded-full bg-[#131D38] hover:bg-[#1E2D52] border border-[#1E2D52] transition-colors group">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-[#0062FF] to-[#00D4FF] text-white text-xs font-bold flex items-center justify-center shadow">
+            RS
+          </div>
+          <span class="hidden md:inline text-xs font-medium text-slate-200">Rishabh S.</span>
+        </button>
+
+        <!-- Mobile Menu Toggle -->
+        <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-lg bg-[#131D38] border border-[#1E2D52] text-slate-300 hover:text-white">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="hidden lg:hidden bg-[#0F172A] border-b border-[#1E2D52] px-4 py-3 space-y-1">
+      <button onclick="navigateTo('landing'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Home</button>
+      <button onclick="navigateTo('roadmap'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38] flex justify-between items-center">
+        <span>Java Full Stack Roadmap</span>
+        <span class="text-xs bg-[#00D4FF]/20 text-[#00D4FF] px-2 py-0.5 rounded">23 Stages</span>
+      </button>
+      <button onclick="navigateTo('course'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Course Syllabus</button>
+      <button onclick="navigateTo('lesson'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Learning Room</button>
+      <button onclick="navigateTo('practice'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Practice IDE</button>
+      <button onclick="navigateTo('quiz'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Quizzes & Tests</button>
+      <button onclick="navigateTo('projects'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Projects</button>
+      <button onclick="navigateTo('dashboard'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Student Dashboard</button>
+      <button onclick="navigateTo('analytics'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Progress & Analytics</button>
+      <button onclick="navigateTo('certificates'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Certificates</button>
+      <button onclick="navigateTo('profile'); toggleMobileMenu()" class="w-full text-left px-3 py-2 rounded-md text-sm text-slate-300 hover:bg-[#131D38]">Profile & Settings</button>
+    </div>
+  </header>
+
+  <!-- MAIN APP ROUTING CONTAINER -->
+  <main class="flex-grow">
+    
+    <!-- 1. LANDING PAGE SECTION -->
+    <section id="page-landing" class="page-view">
+      <!-- Hero Section -->
+      <div class="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-28 border-b border-[#1E2D52]">
+        <!-- Ambient background glows -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-[#0062FF]/15 to-[#00D4FF]/10 blur-[120px] pointer-events-none rounded-full"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#131D38] border border-[#00D4FF]/30 text-[#00D4FF] text-xs font-semibold uppercase tracking-wider mb-6 badge-glow">
+            <span>✨ Designed for College Students & Beginner Coders</span>
+          </div>
+
+          <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+            Master <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#00D4FF] via-[#38BDF8] to-[#0062FF]">Java Full Stack</span> from Zero to Job Ready.
+          </h1>
+
+          <p class="mt-6 text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto font-normal leading-relaxed">
+            The single most structured curriculum in EdTech. Follow our 23-step guided roadmap from Core Java and Spring Boot to React, Cloud, and high-paying software engineering placements.
+          </p>
+
+          <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button onclick="navigateTo('roadmap')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-[#0062FF] to-[#00D4FF] hover:from-[#0052D4] hover:to-[#00B4D8] text-white font-bold text-base shadow-xl shadow-[#0062FF]/25 hover:shadow-[#00D4FF]/30 transition-all flex items-center justify-center gap-2 group">
+              <span>Start Learning Free</span>
+              <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+            </button>
+            <button onclick="navigateTo('practice')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#131D38] hover:bg-[#1E2D52] border border-[#1E2D52] text-white font-semibold text-base transition-colors flex items-center justify-center gap-2">
+              <svg class="w-5 h-5 text-[#00D4FF]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+              <span>Try Interactive IDE</span>
+            </button>
+          </div>
+
+          <!-- Trust Badges / Quick Highlights -->
+          <div class="mt-14 pt-10 border-t border-[#1E2D52]/60 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div class="text-center">
+              <div class="text-3xl font-extrabold text-white">23</div>
+              <div class="text-xs text-slate-400 mt-1 font-medium">Progressive Stages</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-extrabold text-[#00D4FF]">150+</div>
+              <div class="text-xs text-slate-400 mt-1 font-medium">Hands-On Code Labs</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-extrabold text-white">4</div>
+              <div class="text-xs text-slate-400 mt-1 font-medium">Production Capstones</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-extrabold text-emerald-400">94.2%</div>
+              <div class="text-xs text-slate-400 mt-1 font-medium">Placement Success Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Roadmap Preview Teaser -->
+      <div class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+          <div>
+            <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Zero Ambiguity</span>
+            <h2 class="text-3xl font-extrabold text-white mt-1">The 23-Stage Java Career Blueprint</h2>
+            <p class="text-slate-400 text-sm mt-1 max-w-xl">Every stage builds on the previous one. No outdated tech, zero skipped fundamentals.</p>
+          </div>
+          <button onclick="navigateTo('roadmap')" class="text-sm font-semibold text-[#00D4FF] hover:text-white flex items-center gap-1 transition-colors">
+            <span>Explore Complete 23-Stage Curriculum</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="landing-roadmap-preview">
+          <!-- Dynamically populated or static cards -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 card-hover">
+            <div class="flex justify-between items-start mb-4">
+              <span class="px-2.5 py-1 rounded bg-[#0062FF]/20 text-[#38BDF8] text-xs font-semibold">Stage 1 - 3</span>
+              <span class="text-xs text-slate-400">70 Hours</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Core Java & OOP Architecture</h3>
+            <p class="text-slate-400 text-xs leading-relaxed mb-4">Master JVM internal memory stack/heap, garbage collection, dynamic method dispatch, interfaces, and SOLID design.</p>
+            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">JVM Internals</span>
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">Polymorphism</span>
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">SOLID Principles</span>
+            </div>
+          </div>
+
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 card-hover border-t-2 border-t-[#00D4FF]">
+            <div class="flex justify-between items-start mb-4">
+              <span class="px-2.5 py-1 rounded bg-[#00D4FF]/20 text-[#00D4FF] text-xs font-semibold">Stage 13 - 16</span>
+              <span class="text-xs text-slate-400">95 Hours</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Spring Boot 3 & Hibernate JPA</h3>
+            <p class="text-slate-400 text-xs leading-relaxed mb-4">Architect RESTful microservices, IoC dependency injection, entity relationships, query optimization, and transaction handling.</p>
+            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">Spring Boot 3</span>
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">REST APIs</span>
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">Hibernate ORM</span>
+            </div>
+          </div>
+
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 card-hover">
+            <div class="flex justify-between items-start mb-4">
+              <span class="px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-semibold">Stage 17 - 23</span>
+              <span class="text-xs text-slate-400">140 Hours</span>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-2">Full-Stack, Security & Placement</h3>
+            <p class="text-slate-400 text-xs leading-relaxed mb-4">Connect modern React 18 frontends, stateless JWT security, Docker deployment, and mock interviews for corporate selection.</p>
+            <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">React 18</span>
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">Spring Security 6</span>
+              <span class="bg-[#1E293B] px-2 py-0.5 rounded">AWS & Docker</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Featured Projects Section Teaser -->
+      <div class="bg-[#0F172A] py-16 border-y border-[#1E2D52]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center max-w-3xl mx-auto mb-12">
+            <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Proof of Work</span>
+            <h2 class="text-3xl font-extrabold text-white mt-1">Real-World Projects That Impress Interviewers</h2>
+            <p class="text-slate-400 text-sm mt-2">No basic to-do apps or calculator demos. Build enterprise-scale multi-tier systems ready for production deployment.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                  <span class="text-amber-400 font-semibold">Beginner Project</span>
+                  <span>15 Hours</span>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Enterprise Banking & Transaction Ledger</h4>
+                <p class="text-slate-400 text-xs mb-4">Core Java & JDBC system managing ACID transactions, thread-safe balance deductions, and audit logging with PostgreSQL.</p>
+              </div>
+              <button onclick="navigateTo('projects')" class="w-full py-2.5 rounded-lg bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-semibold text-slate-200 transition-colors">
+                View Project Specs
+              </button>
+            </div>
+
+            <div class="bg-[#131D38] border border-[#0062FF]/50 rounded-2xl p-6 flex flex-col justify-between relative shadow-lg shadow-[#0062FF]/10">
+              <span class="absolute -top-3 right-6 bg-[#0062FF] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Most Popular</span>
+              <div>
+                <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                  <span class="text-[#00D4FF] font-semibold">Intermediate Project</span>
+                  <span>35 Hours</span>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">E-Commerce REST Microservices Platform</h4>
+                <p class="text-slate-400 text-xs mb-4">Spring Boot 3 + JPA service with JWT stateless authorization, coupon validation, pagination, and OpenAPI Swagger documentation.</p>
+              </div>
+              <button onclick="navigateTo('projects')" class="w-full py-2.5 rounded-lg bg-[#0062FF] hover:bg-[#0052D4] text-xs font-semibold text-white transition-colors">
+                View Project Specs
+              </button>
+            </div>
+
+            <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between text-xs text-slate-400 mb-3">
+                  <span class="text-purple-400 font-semibold">Advanced Capstone</span>
+                  <span>50 Hours</span>
+                </div>
+                <h4 class="text-lg font-bold text-white mb-2">Rishabh LMS: Full Stack EdTech Engine</h4>
+                <p class="text-slate-400 text-xs mb-4">Complete React SPA + Spring Boot microservice suite with live code execution runner, video streaming, and Dockerized deployment.</p>
+              </div>
+              <button onclick="navigateTo('projects')" class="w-full py-2.5 rounded-lg bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-semibold text-slate-200 transition-colors">
+                View Project Specs
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Student Placement & Success Section -->
+      <div class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+          <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Placement Record</span>
+          <h2 class="text-3xl font-extrabold text-white mt-1">From College Classrooms to Top Tech Roles</h2>
+          <p class="text-slate-400 text-sm mt-2">See how our alumni successfully transitioned from beginner students to placed full stack engineers.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-[#0062FF] text-white font-bold flex items-center justify-center text-sm">AN</div>
+              <div>
+                <h4 class="text-sm font-bold text-white">Aditya Nair</h4>
+                <div class="text-xs text-emerald-400 font-medium">Software Engineer @ Oracle (14 LPA)</div>
+              </div>
+            </div>
+            <p class="text-slate-300 text-xs leading-relaxed">
+              "The 23-step roadmap removed every bit of guesswork. I understood JVM memory leaks and Spring transaction isolation so well that my technical interview felt effortless."
+            </p>
+          </div>
+
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-[#00D4FF] text-[#0A1128] font-bold flex items-center justify-center text-sm">SR</div>
+              <div>
+                <h4 class="text-sm font-bold text-white">Sneha Reddy</h4>
+                <div class="text-xs text-emerald-400 font-medium">Associate Java Developer @ Cognizant</div>
+              </div>
+            </div>
+            <p class="text-slate-300 text-xs leading-relaxed">
+              "The hands-on code labs and immediate test evaluations were game changers. Going through the Collections internals and Spring Security modules helped me clear two campus offers."
+            </p>
+          </div>
+
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 rounded-full bg-purple-600 text-white font-bold flex items-center justify-center text-sm">KV</div>
+              <div>
+                <h4 class="text-sm font-bold text-white">Karan Verma</h4>
+                <div class="text-xs text-emerald-400 font-medium">Full Stack Intern @ Razorpay</div>
+              </div>
+            </div>
+            <p class="text-slate-300 text-xs leading-relaxed">
+              "RishabhInfoTech doesn't teach outdated Java from 2012. You learn Java 17/21, Spring Boot 3, and React 18 with modern best practices that real startup teams use."
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div class="bg-[#0F172A] py-16 border-t border-[#1E2D52]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-10">
+            <h2 class="text-3xl font-extrabold text-white">Frequently Asked Questions</h2>
+            <p class="text-slate-400 text-sm mt-1">Everything you need to know about starting your Java Full Stack journey.</p>
+          </div>
+
+          <div class="space-y-4" id="faq-list">
+            <!-- Dynamically populated or accordion items -->
+            <div class="bg-[#131D38] border border-[#1E2D52] rounded-xl p-5">
+              <h4 class="text-sm font-bold text-white mb-2">I have never written a line of code. Can I start with RishabhInfoTech?</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">Yes! Stage 1 begins with Programming Fundamentals and algorithmic logic from scratch. You do not need any prior coding background or a computer science degree.</p>
+            </div>
+            <div class="bg-[#131D38] border border-[#1E2D52] rounded-xl p-5">
+              <h4 class="text-sm font-bold text-white mb-2">How does the 23-stage Java Full Stack roadmap work?</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">The roadmap is structured in strict logical sequence. Each stage features interactive video modules, coding practice with automated test cases, and milestone projects so you master backend and frontend before moving on.</p>
+            </div>
+            <div class="bg-[#131D38] border border-[#1E2D52] rounded-xl p-5">
+              <h4 class="text-sm font-bold text-white mb-2">Are the projects realistic enough for my resume?</h4>
+              <p class="text-xs text-slate-300 leading-relaxed">Absolutely. Rather than basic to-do apps, you build multi-tier enterprise systems: a distributed banking CLI, an e-commerce microservice suite with JWT auth, and an end-to-end LMS platform.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. STUDENT DASHBOARD SECTION -->
+    <section id="page-dashboard" class="page-view hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Welcome Header -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between pb-6 mb-8 border-b border-[#1E2D52] gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl sm:text-3xl font-bold text-white">Welcome back, Rishabh 👋</h1>
+            <span class="bg-[#00D4FF]/20 text-[#00D4FF] text-xs font-semibold px-2 py-0.5 rounded-full">Pro Student</span>
+          </div>
+          <p class="text-sm text-slate-400 mt-1">You are currently at <span class="text-[#00D4FF] font-semibold">Stage 3 of 23: Object-Oriented Programming</span>. Keep up the momentum!</p>
+        </div>
+
+        <button onclick="navigateTo('lesson')" class="px-5 py-3 rounded-xl bg-gradient-to-r from-[#0062FF] to-[#00D4FF] text-white font-semibold text-sm shadow-lg shadow-[#0062FF]/20 hover:shadow-[#00D4FF]/25 flex items-center justify-center gap-2 group transition-all">
+          <span>Continue Lesson 204</span>
+          <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        </button>
+      </div>
+
+      <!-- Quick Metrics Grid -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-[#131D38] border border-[#1E2D52] rounded-xl p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-400">Roadmap Progress</span>
+            <span class="text-xs text-[#00D4FF] font-bold">38%</span>
+          </div>
+          <div class="text-2xl font-bold text-white mt-2">Stage 3/23</div>
+          <div class="w-full bg-[#1E293B] h-1.5 rounded-full mt-3 overflow-hidden">
+            <div class="bg-gradient-to-r from-[#0062FF] to-[#00D4FF] h-full rounded-full" style="width: 38%"></div>
+          </div>
+        </div>
+
+        <div class="bg-[#131D38] border border-[#1E2D52] rounded-xl p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-400">Learning Hours</span>
+            <span class="text-xs text-amber-400">🔥 +6.5h this week</span>
+          </div>
+          <div class="text-2xl font-bold text-white mt-2">48.5 hrs</div>
+          <div class="text-[11px] text-slate-400 mt-2">120 hrs total curriculum</div>
+        </div>
+
+        <div class="bg-[#131D38] border border-[#1E2D52] rounded-xl p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-400">Problems Solved</span>
+            <span class="text-xs text-emerald-400 font-bold">Top 8%</span>
+          </div>
+          <div class="text-2xl font-bold text-white mt-2">36 / 150</div>
+          <div class="text-[11px] text-slate-400 mt-2">All test suites passed</div>
+        </div>
+
+        <div class="bg-[#131D38] border border-[#1E2D52] rounded-xl p-5">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-slate-400">Certificates Earned</span>
+            <span class="text-xs text-purple-400 font-bold">Verified</span>
+          </div>
+          <div class="text-2xl font-bold text-white mt-2">2 Badges</div>
+          <div class="text-[11px] text-slate-400 mt-2">Next at Stage 4</div>
+        </div>
+      </div>
+
+      <!-- Main Dashboard Content Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left 2 Cols: Active Course & Upcoming Schedule -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- Current Active Course Card -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Current Flagship Program</span>
+              <span class="text-xs bg-[#1E293B] text-slate-300 px-2.5 py-1 rounded-full">Module 2 of 4</span>
+            </div>
+
+            <h3 class="text-xl font-bold text-white mb-2">Java Full Stack Developer Masterclass: Zero to Job Ready</h3>
+            <p class="text-slate-400 text-xs mb-6">Instructor: Er. Rishabh Verma • Ex-Lead Architect</p>
+
+            <!-- Lesson in progress box -->
+            <div class="bg-[#0A1128] border border-[#1E2D52] rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-[#0062FF]/20 text-[#00D4FF] flex items-center justify-center flex-shrink-0">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <div>
+                  <div class="text-[11px] text-slate-400 uppercase font-semibold">Lesson 204 (In Progress)</div>
+                  <div class="text-sm font-bold text-white">Polymorphism: Compile-Time vs Runtime Dynamic Dispatch</div>
+                </div>
+              </div>
+              <button onclick="navigateTo('lesson')" class="px-4 py-2 rounded-lg bg-[#00D4FF] hover:bg-[#00B4D8] text-[#0A1128] font-bold text-xs whitespace-nowrap transition-colors">
+                Resume Video
+              </button>
+            </div>
+          </div>
+
+          <!-- Upcoming Next Lessons -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <h3 class="text-base font-bold text-white mb-4">Upcoming in Module 2</h3>
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3.5 rounded-xl bg-[#0F172A] border border-[#1E2D52]">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded-full bg-[#1E293B] text-slate-400 text-xs flex items-center justify-center font-bold">5</span>
+                  <div>
+                    <div class="text-xs font-semibold text-slate-200">Abstract Classes vs Interfaces & Java 8 Default Methods</div>
+                    <div class="text-[11px] text-slate-400">38 min • Theory & Coding Lab</div>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-500 font-medium">Locked</span>
+              </div>
+
+              <div class="flex items-center justify-between p-3.5 rounded-xl bg-[#0F172A] border border-[#1E2D52]">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 h-6 rounded-full bg-[#1E293B] text-slate-400 text-xs flex items-center justify-center font-bold">6</span>
+                  <div>
+                    <div class="text-xs font-semibold text-slate-200">Applying SOLID Design Principles in Enterprise Java</div>
+                    <div class="text-[11px] text-slate-400">45 min • Architecture Lab</div>
+                  </div>
+                </div>
+                <span class="text-xs text-slate-500 font-medium">Locked</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 1 Col: Streak, Quick Actions & Assessments -->
+        <div class="space-y-6">
+          
+          <!-- Daily Practice Card -->
+          <div class="bg-gradient-to-br from-[#131D38] to-[#1E293B] border border-[#00D4FF]/30 rounded-2xl p-6">
+            <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-2">
+              <span>🔥 Daily Challenge Ready</span>
+            </div>
+            <h4 class="text-base font-bold text-white mb-1">Filter High-Value Orders (Java 8 Streams)</h4>
+            <p class="text-xs text-slate-300 mb-4">Earn +50 XP and protect your 14-day study streak today.</p>
+            <button onclick="navigateTo('practice')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-[#0062FF] to-[#00D4FF] text-white font-bold text-xs shadow-md transition-all">
+              Solve Problem Now
+            </button>
+          </div>
+
+          <!-- Quick Assessment Sprint -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <h4 class="text-sm font-bold text-white mb-2">Sprint Quiz: OOP & Spring</h4>
+            <p class="text-xs text-slate-400 mb-4">5 conceptual questions to validate your understanding of dynamic dispatch and Spring @RestController.</p>
+            <button onclick="navigateTo('quiz')" class="w-full py-2.5 rounded-xl bg-[#1E293B] hover:bg-[#1E2D52] border border-[#1E2D52] text-xs font-semibold text-[#00D4FF] transition-colors">
+              Take 5-Minute Quiz
+            </button>
+          </div>
+
+          <!-- Earned Credential Snapshot -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <h4 class="text-sm font-bold text-white mb-3">Latest Earned Certificate</h4>
+            <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-sm">
+                🏆
+              </div>
+              <div class="overflow-hidden">
+                <div class="text-xs font-bold text-white truncate">Java OOPs Architecture</div>
+                <div class="text-[10px] text-slate-400">Score: 96% Distinction</div>
+              </div>
+            </div>
+            <button onclick="navigateTo('certificates')" class="w-full mt-3 text-center text-xs font-semibold text-[#00D4FF] hover:underline">
+              View All Certificates & Credentials →
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. ROADMAP (23 STAGES) SECTION -->
+    <section id="page-roadmap" class="page-view hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Curriculum Roadmap</span>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white mt-1">23-Stage Java Full Stack Pathway</h1>
+        <p class="text-sm text-slate-400 mt-2">A battle-tested progression taking you from complete beginner to production-level software engineer.</p>
+        
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap items-center justify-center gap-2 mt-6">
+          <button onclick="filterRoadmap('all')" class="roadmap-filter active px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#0062FF] text-white">All Stages (23)</button>
+          <button onclick="filterRoadmap('Beginner')" class="roadmap-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#131D38] text-slate-300 hover:text-white border border-[#1E2D52]">Beginner</button>
+          <button onclick="filterRoadmap('Intermediate')" class="roadmap-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#131D38] text-slate-300 hover:text-white border border-[#1E2D52]">Intermediate</button>
+          <button onclick="filterRoadmap('Advanced')" class="roadmap-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#131D38] text-slate-300 hover:text-white border border-[#1E2D52]">Advanced</button>
+          <button onclick="filterRoadmap('Job Ready')" class="roadmap-filter px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[#131D38] text-slate-300 hover:text-white border border-[#1E2D52]">Job Ready</button>
+        </div>
+      </div>
+
+      <!-- Roadmap Grid / List -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="roadmap-container">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- 4. COURSE SYLLABUS SECTION -->
+    <section id="page-course" class="page-view hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <!-- Course Hero Banner -->
+      <div class="bg-gradient-to-r from-[#0F172A] to-[#131D38] border border-[#1E2D52] rounded-3xl p-6 sm:p-10 mb-8 relative overflow-hidden">
+        <div class="max-w-3xl relative z-10">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="bg-[#00D4FF]/20 text-[#00D4FF] text-xs font-bold px-3 py-1 rounded-full uppercase">Flagship Career Track</span>
+            <span class="text-xs text-slate-400">⏱️ 120 Hours</span>
+            <span class="text-xs text-amber-400">★ 4.9 (14,820 students)</span>
+          </div>
+
+          <h1 class="text-2xl sm:text-4xl font-extrabold text-white mb-3">
+            Java Full Stack Developer Masterclass: Zero to Job Ready
+          </h1>
+          <p class="text-slate-300 text-sm leading-relaxed mb-6">
+            The definitive end-to-end program covering Core Java, OOPs, Collections, Spring Boot 3, Hibernate JPA, React 18, PostgreSQL, Microservices, and Cloud Deployment.
+          </p>
+
+          <div class="flex flex-wrap gap-4">
+            <button onclick="navigateTo('lesson')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-[#0062FF] to-[#00D4FF] text-white font-bold text-sm shadow-lg shadow-[#0062FF]/25">
+              Start Learning (Lesson 101)
+            </button>
+            <button onclick="navigateTo('projects')" class="px-6 py-3 rounded-xl bg-[#1E293B] hover:bg-[#1E2D52] text-slate-200 font-semibold text-sm border border-[#1E2D52]">
+              Explore Included Projects
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Course Details Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left 2 Cols: Syllabus Modules & Outcomes -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- Learning Outcomes -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <h3 class="text-base font-bold text-white mb-4">What You Will Master</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300">
+              <div class="flex items-start gap-2">
+                <span class="text-[#00D4FF] mt-0.5">✓</span>
+                <span>Modern Java 17/21 & Enterprise OOP Design</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-[#00D4FF] mt-0.5">✓</span>
+                <span>Spring Boot 3 Microservices & REST APIs</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-[#00D4FF] mt-0.5">✓</span>
+                <span>Hibernate ORM & Spring Data JPA</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-[#00D4FF] mt-0.5">✓</span>
+                <span>Reactive Modern Frontends with React 18</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-[#00D4FF] mt-0.5">✓</span>
+                <span>Stateless JWT Auth with Spring Security 6</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <span class="text-[#00D4FF] mt-0.5">✓</span>
+                <span>Docker Containers & CI/CD Cloud Deploy</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Course Modules Accordion -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <h3 class="text-base font-bold text-white mb-4">Course Curriculum & Modules</h3>
+            <div class="space-y-4" id="course-modules-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 1 Col: Instructor & Certification Meta -->
+        <div class="space-y-6">
+          <!-- Instructor Profile -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">Your Instructor</h4>
+            <div class="flex items-center gap-3 mb-3">
+              <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-[#0062FF] to-[#00D4FF] text-white font-bold flex items-center justify-center text-base">
+                RV
+              </div>
+              <div>
+                <h5 class="text-sm font-bold text-white">Er. Rishabh Verma</h5>
+                <p class="text-xs text-[#00D4FF]">Lead Systems Architect</p>
+              </div>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              12+ years designing distributed backend architectures for enterprise banking and fintech platforms. Mentored over 15,000+ students into high-paying engineering careers.
+            </p>
+          </div>
+
+          <!-- Certificate Guarantee -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <div class="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase mb-2">
+              <span>🏆 Verified Certificate Included</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+              Upon passing the module assessments and the capstone project evaluation, you will receive an official verifiable credential recognized by hiring partners.
+            </p>
+            <button onclick="navigateTo('certificates')" class="w-full py-2.5 rounded-lg bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-semibold text-[#00D4FF] transition-colors">
+              Preview Certificate Sample
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 5. VIDEO & LESSON LEARNING INTERFACE -->
+    <section id="page-lesson" class="page-view hidden py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Breadcrumb & Progress Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-[#1E2D52]">
+        <div>
+          <div class="flex items-center gap-2 text-xs text-slate-400">
+            <span class="hover:text-white cursor-pointer" onclick="navigateTo('course')">Course</span>
+            <span>/</span>
+            <span class="text-slate-300">Module 2</span>
+            <span>/</span>
+            <span class="text-[#00D4FF] font-semibold">Lesson 204</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">
+            Polymorphism: Compile-Time vs Runtime Dynamic Method Dispatch
+          </h1>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button id="btn-complete-lesson" onclick="toggleLessonComplete()" class="px-4 py-2 rounded-lg bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-semibold text-slate-200 border border-[#1E2D52] flex items-center gap-1.5 transition-colors">
+            <span id="lesson-check-icon">⚪</span>
+            <span id="lesson-check-text">Mark as Completed</span>
+          </button>
+          <button onclick="navigateTo('practice')" class="px-4 py-2 rounded-lg bg-[#0062FF] hover:bg-[#0052D4] text-xs font-bold text-white flex items-center gap-1.5 shadow transition-colors">
+            <span>Practice Code Lab</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Learning Split -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Left 2 Cols: Player & Content -->
+        <div class="lg:col-span-2 space-y-6">
+          
+          <!-- Mock Video Player Area -->
+          <div class="aspect-video bg-[#050B18] rounded-2xl border border-[#1E2D52] relative overflow-hidden flex flex-col items-center justify-center group shadow-2xl">
+            <!-- Simulated Video Scene -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0A1128] via-transparent to-transparent opacity-80 pointer-events-none"></div>
+            
+            <div class="w-16 h-16 rounded-full bg-[#00D4FF] text-[#0A1128] flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform cursor-pointer" onclick="playLessonVideo()">
+              <svg class="w-8 h-8 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+            </div>
+            
+            <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-slate-300">
+              <span class="bg-[#0A1128]/80 px-2.5 py-1 rounded backdrop-blur">HD 1080p • 42 mins</span>
+              <span class="bg-[#0A1128]/80 px-2.5 py-1 rounded backdrop-blur">JVM Internals & vtable Demo</span>
+            </div>
+          </div>
+
+          <!-- Lesson Tabs: Notes, Code Examples, Resources -->
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+            <div class="flex items-center gap-4 border-b border-[#1E2D52] pb-3 mb-5">
+              <button onclick="switchLessonTab('notes')" id="tab-btn-notes" class="text-xs font-bold text-[#00D4FF] border-b-2 border-[#00D4FF] pb-2 transition-all">Overview & Notes</button>
+              <button onclick="switchLessonTab('code')" id="tab-btn-code" class="text-xs font-semibold text-slate-400 hover:text-white pb-2 transition-all">Code Sample</button>
+              <button onclick="switchLessonTab('resources')" id="tab-btn-resources" class="text-xs font-semibold text-slate-400 hover:text-white pb-2 transition-all">Downloads & Resources (3)</button>
+            </div>
+
+            <!-- Tab Content: Notes -->
+            <div id="tab-content-notes" class="space-y-4">
+              <h3 class="text-sm font-bold text-white">Lesson Summary</h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                In this deep dive, we demystify how the JVM executes method calls at runtime. You will learn the difference between early binding (compile-time) and late binding (runtime dynamic dispatch).
+              </p>
+              
+              <h4 class="text-xs font-bold text-slate-200 mt-4">Key Takeaways:</h4>
+              <ul class="space-y-2 text-xs text-slate-300">
+                <li class="flex items-start gap-2">
+                  <span class="text-[#00D4FF]">•</span>
+                  <span>Compile-time polymorphism is achieved via method overloading within the same class.</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[#00D4FF]">•</span>
+                  <span>Runtime polymorphism is implemented with method overriding using the virtual method table (vtable).</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="text-[#00D4FF]">•</span>
+                  <span>Static methods, private methods, and final methods are NOT resolved dynamically (they are non-virtual).</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Tab Content: Code -->
+            <div id="tab-content-code" class="hidden space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-mono text-slate-400">PaymentServiceDemo.java</span>
+                <button onclick="copyLessonCode()" class="px-2.5 py-1 rounded bg-[#1E293B] hover:bg-[#1E2D52] text-[11px] font-semibold text-[#00D4FF] flex items-center gap-1 transition-colors">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                  <span>Copy Code</span>
+                </button>
+              </div>
+              <pre class="bg-[#0A1128] border border-[#1E2D52] p-4 rounded-xl text-xs text-slate-200 overflow-x-auto leading-relaxed"><code id="lesson-code-block">// Polymorphism & Dynamic Dispatch Example
+public interface PaymentGateway {
+    void process(double amount);
+}
+
+public class UpiGateway implements PaymentGateway {
+    @Override
+    public void process(double amount) {
+        System.out.println("Processing instant UPI payment: ₹" + amount);
+    }
+}
+
+public class CardGateway implements PaymentGateway {
+    @Override
+    public void process(double amount) {
+        System.out.println("Processing 3D-Secure Card payment: ₹" + amount);
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        // Parent interface reference pointing to runtime instance
+        PaymentGateway gateway = new UpiGateway();
+        gateway.process(1500.0); // Dynamically dispatches to UpiGateway.process()
+    }
+}</code></pre>
+            </div>
+
+            <!-- Tab Content: Resources -->
+            <div id="tab-content-resources" class="hidden space-y-3">
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="text-base">📄</span>
+                  <div>
+                    <div class="text-xs font-semibold text-white">JVM Method Table & Invokevirtual Spec</div>
+                    <div class="text-[10px] text-slate-400">PDF Guide • 1.4 MB</div>
+                  </div>
+                </div>
+                <button onclick="showToast('Resource downloaded successfully!')" class="px-2.5 py-1 rounded bg-[#1E293B] text-xs font-semibold text-[#00D4FF] hover:bg-[#1E2D52]">Download</button>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <span class="text-base">📦</span>
+                  <div>
+                    <div class="text-xs font-semibold text-white">Source Code Starter Package (.zip)</div>
+                    <div class="text-[10px] text-slate-400">Archive • 350 KB</div>
+                  </div>
+                </div>
+                <button onclick="showToast('Starter project downloaded!')" class="px-2.5 py-1 rounded bg-[#1E293B] text-xs font-semibold text-[#00D4FF] hover:bg-[#1E2D52]">Download</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right 1 Col: Chapter Navigation -->
+        <div class="space-y-4">
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-5">
+            <h3 class="text-sm font-bold text-white mb-3">Module 2 Chapters</h3>
+            <div class="space-y-2 text-xs">
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] flex items-center justify-between cursor-pointer hover:border-slate-500">
+                <div class="flex items-center gap-2">
+                  <span class="text-emerald-400">✓</span>
+                  <span class="text-slate-300">201. Classes & Objects</span>
+                </div>
+                <span class="text-[10px] text-slate-500">26m</span>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] flex items-center justify-between cursor-pointer hover:border-slate-500">
+                <div class="flex items-center gap-2">
+                  <span class="text-emerald-400">✓</span>
+                  <span class="text-slate-300">202. Encapsulation & Modifiers</span>
+                </div>
+                <span class="text-[10px] text-slate-500">30m</span>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] flex items-center justify-between cursor-pointer hover:border-slate-500">
+                <div class="flex items-center gap-2">
+                  <span class="text-emerald-400">✓</span>
+                  <span class="text-slate-300">203. Inheritance & super</span>
+                </div>
+                <span class="text-[10px] text-slate-500">35m</span>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#0062FF]/20 border border-[#00D4FF]/50 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-[#00D4FF]">▶</span>
+                  <span class="text-white font-semibold">204. Polymorphism & Dispatch</span>
+                </div>
+                <span class="text-[10px] text-[#00D4FF] font-bold">Current</span>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] flex items-center justify-between opacity-60">
+                <div class="flex items-center gap-2">
+                  <span class="text-slate-500">🔒</span>
+                  <span class="text-slate-400">205. Abstract vs Interfaces</span>
+                </div>
+                <span class="text-[10px] text-slate-500">38m</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 6. INTERACTIVE CODING PRACTICE (ONLINE IDE) -->
+    <section id="page-practice" class="page-view hidden py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Coding Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-[#1E2D52]">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-xs font-semibold">Easy / Medium</span>
+            <span class="text-xs text-slate-400">Time Limit: 2.0s • Memory: 256 MB</span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-bold text-white mt-1">Problem 101: Filter High-Value Orders Using Java Streams</h1>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="resetCodingEditor()" class="px-3 py-1.5 rounded-lg bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-medium text-slate-300 transition-colors">
+            Reset Code
+          </button>
+          <button onclick="toggleHints()" class="px-3 py-1.5 rounded-lg bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-medium text-amber-300 transition-colors">
+            💡 Hints
+          </button>
+          <button onclick="runJavaCode()" id="btn-run-code" class="px-5 py-2 rounded-lg bg-gradient-to-r from-emerald-500 to-teal-400 hover:from-emerald-600 hover:to-teal-500 text-[#0A1128] font-bold text-xs shadow-lg transition-all flex items-center gap-1.5">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+            <span>Run & Test Code</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hints Box (Collapsible) -->
+      <div id="hints-panel" class="hidden mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 text-xs space-y-1">
+        <div class="font-bold mb-1">💡 Solution Hints:</div>
+        <div>1. Use <code>orders.stream().filter(order -> order.amount >= minAmount)</code> to filter out lower transactions.</div>
+        <div>2. Chain <code>.map(order -> order.customerName)</code> to extract string values.</div>
+        <div>3. Use <code>.distinct().sorted()</code> to maintain uniqueness and alphabetical order.</div>
+      </div>
+
+      <!-- IDE Workspace: Split Screen -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[560px]">
+        
+        <!-- Left: Problem Description & Test Case Status (5 Cols) -->
+        <div class="lg:col-span-5 flex flex-col gap-4">
+          
+          <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-5 flex-grow">
+            <h3 class="text-sm font-bold text-white mb-2">Problem Statement</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+              You are given a list of <code class="bg-[#0A1128] px-1 py-0.5 rounded text-[#00D4FF]">Order</code> records. Each order contains an <code class="bg-[#0A1128] px-1 py-0.5 rounded text-[#00D4FF]">orderId</code>, <code class="bg-[#0A1128] px-1 py-0.5 rounded text-[#00D4FF]">customerName</code>, and <code class="bg-[#0A1128] px-1 py-0.5 rounded text-[#00D4FF]">amount</code>.
+            </p>
+
+            <h4 class="text-xs font-bold text-slate-200 mb-2">Instructions:</h4>
+            <ol class="list-decimal list-inside space-y-1.5 text-xs text-slate-300 mb-6">
+              <li>Filter orders where <code class="text-emerald-400">amount &gt;= minAmount</code>.</li>
+              <li>Extract the customer's name.</li>
+              <li>Remove duplicate customer names.</li>
+              <li>Sort alphabetically in ascending order.</li>
+              <li>Return as a <code class="text-[#00D4FF]">List&lt;String&gt;</code>.</li>
+            </ol>
+
+            <h4 class="text-xs font-bold text-slate-200 mb-3">Evaluation Test Cases:</h4>
+            <div class="space-y-2.5" id="testcases-list">
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] text-xs">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-semibold text-slate-300">Test Case 1 (Standard)</span>
+                  <span id="tc-status-1" class="text-slate-400 text-[11px]">Ready to run</span>
+                </div>
+                <div class="text-[11px] text-slate-400 font-mono">Input: minAmount = 5000.0 (5 records)</div>
+                <div class="text-[11px] text-emerald-400 font-mono mt-0.5">Expected: ['Aarav', 'Priya', 'Rohan']</div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] text-xs">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-semibold text-slate-300">Test Case 2 (Edge Case: High Filter)</span>
+                  <span id="tc-status-2" class="text-slate-400 text-[11px]">Ready to run</span>
+                </div>
+                <div class="text-[11px] text-slate-400 font-mono">Input: minAmount = 25000.0</div>
+                <div class="text-[11px] text-emerald-400 font-mono mt-0.5">Expected: []</div>
+              </div>
+
+              <div class="p-3 rounded-xl bg-[#0A1128] border border-[#1E2D52] text-xs">
+                <div class="flex justify-between items-center mb-1">
+                  <span class="font-semibold text-slate-300">Test Case 3 (Edge Case: Null/Empty)</span>
+                  <span id="tc-status-3" class="text-slate-400 text-[11px]">Ready to run</span>
+                </div>
+                <div class="text-[11px] text-slate-400 font-mono">Input: orders = null</div>
+                <div class="text-[11px] text-emerald-400 font-mono mt-0.5">Expected: []</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Code Editor & Console Output (7 Cols) -->
+        <div class="lg:col-span-7 flex flex-col gap-4">
+          
+          <!-- Code Editor Panel -->
+          <div class="bg-[#050B18] border border-[#1E2D52] rounded-2xl overflow-hidden flex flex-col flex-grow shadow-2xl">
+            <div class="bg-[#0A1128] px-4 py-2.5 border-b border-[#1E2D52] flex items-center justify-between text-xs">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500/80"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500/80"></span>
+                <span class="font-mono text-slate-300 ml-2 font-semibold">Solution.java (OpenJDK 21)</span>
+              </div>
+              <span class="text-[11px] text-[#00D4FF]">Auto-Save Enabled</span>
+            </div>
+
+            <!-- Textarea Editor -->
+            <textarea id="java-code-editor" spellcheck="false" class="w-full h-80 bg-transparent text-slate-100 font-mono text-xs p-4 focus:outline-none resize-none leading-relaxed border-none">import java.util.*;
+import java.util.stream.Collectors;
+
+public class Solution {
+    public static class Order {
+        int orderId;
+        String customerName;
+        double amount;
+
+        public Order(int id, String name, double amt) {
+            this.orderId = id;
+            this.customerName = name;
+            this.amount = amt;
+        }
+    }
+
+    public static List<String> getPremiumCustomerNames(List<Order> orders, double minAmount) {
+        if (orders == null || orders.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // TODO: Implement using Java 8 Stream API
+        return orders.stream()
+            .filter(o -> o.amount >= minAmount)
+            .map(o -> o.customerName)
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
+    }
+
+    public static void main(String[] args) {
+        List<Order> sampleOrders = Arrays.asList(
+            new Order(101, "Aarav", 4500.0),
+            new Order(102, "Priya", 12000.0),
+            new Order(103, "Rohan", 8900.0),
+            new Order(104, "Aarav", 15000.0),
+            new Order(105, "Sneha", 2500.0)
+        );
+
+        List<String> result = getPremiumCustomerNames(sampleOrders, 5000.0);
+        System.out.println("Output: " + result);
+    }
+}</textarea>
+          </div>
+
+          <!-- Console Output Box -->
+          <div class="bg-[#050B18] border border-[#1E2D52] rounded-2xl p-4">
+            <div class="flex items-center justify-between text-xs text-slate-400 mb-2 border-b border-[#1E2D52] pb-1.5">
+              <span class="font-mono font-semibold">Terminal Stdout &amp; Test Runner</span>
+              <span id="exec-time" class="text-[10px]">Ready</span>
+            </div>
+            <pre id="console-output" class="font-mono text-xs text-slate-300 leading-relaxed overflow-x-auto h-24">Press "Run & Test Code" to compile and execute test suites against the Java Virtual Machine...</pre>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 7. QUIZZES & ASSESSMENTS SECTION -->
+    <section id="page-quiz" class="page-view hidden py-8 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Quiz Header -->
+      <div class="text-center mb-8">
+        <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Assessment Engine</span>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Core Java & Spring Boot Fundamentals</h1>
+        <p class="text-xs text-slate-400 mt-1">5 Multiple Choice Questions • Instant Explanations & Score Card</p>
+      </div>
+
+      <!-- Quiz Card Box -->
+      <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 sm:p-8 shadow-2xl relative">
+        
+        <!-- Progress Stepper -->
+        <div class="flex items-center justify-between text-xs text-slate-400 mb-4">
+          <span id="quiz-question-counter" class="font-bold text-white">Question 1 of 5</span>
+          <span id="quiz-timer" class="text-amber-400 font-mono">⏱️ 08:42</span>
+        </div>
+
+        <div class="w-full bg-[#1E293B] h-1.5 rounded-full mb-6 overflow-hidden">
+          <div id="quiz-progress-bar" class="bg-gradient-to-r from-[#0062FF] to-[#00D4FF] h-full rounded-full transition-all duration-300" style="width: 20%"></div>
+        </div>
+
+        <!-- Question Title -->
+        <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-white mb-6 leading-snug">
+          Which of the following is TRUE regarding Dynamic Method Dispatch in Java?
+        </h3>
+
+        <!-- Options Container -->
+        <div class="space-y-3 mb-6" id="quiz-options-container">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Explanation Area (Initially Hidden) -->
+        <div id="quiz-explanation-box" class="hidden mb-6 p-4 rounded-xl bg-[#0A1128] border border-[#00D4FF]/30 text-xs">
+          <div class="font-bold text-[#00D4FF] mb-1">📘 Deep Dive Explanation:</div>
+          <div id="quiz-explanation-text" class="text-slate-300 leading-relaxed">Explanation text goes here.</div>
+        </div>
+
+        <!-- Quiz Footer Actions -->
+        <div class="flex items-center justify-between pt-4 border-t border-[#1E2D52]">
+          <button id="btn-quiz-prev" onclick="navigateQuiz(-1)" class="px-4 py-2 rounded-lg bg-[#1E293B] text-xs font-semibold text-slate-300 hover:text-white transition-colors" disabled>
+            ← Previous
+          </button>
+          
+          <button id="btn-quiz-next" onclick="navigateQuiz(1)" class="px-6 py-2.5 rounded-lg bg-[#0062FF] hover:bg-[#0052D4] text-xs font-bold text-white transition-all shadow">
+            Next Question →
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Quiz Results Modal / Replacement Container -->
+      <div id="quiz-results-container" class="hidden bg-[#131D38] border border-[#1E2D52] rounded-2xl p-8 text-center shadow-2xl">
+        <div class="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 text-3xl flex items-center justify-center mx-auto mb-4">
+          🏆
+        </div>
+        <h2 class="text-2xl font-bold text-white mb-1">Assessment Complete!</h2>
+        <p class="text-xs text-slate-400 mb-6">Here is how you performed on Core Java & Spring Boot Fundamentals:</p>
+
+        <div class="max-w-xs mx-auto bg-[#0A1128] border border-[#1E2D52] rounded-xl p-5 mb-6">
+          <div class="text-4xl font-extrabold text-[#00D4FF]" id="final-score-display">100%</div>
+          <div class="text-xs text-slate-400 mt-1">5 of 5 questions answered correctly</div>
+          <div class="mt-3 text-xs font-semibold text-emerald-400 bg-emerald-500/10 py-1 px-3 rounded-full inline-block">
+            Distinction Grade Achieved
+          </div>
+        </div>
+
+        <div class="flex justify-center gap-3">
+          <button onclick="retakeQuiz()" class="px-5 py-2.5 rounded-xl bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-semibold text-white transition-colors">
+            Retake Assessment
+          </button>
+          <button onclick="navigateTo('certificates')" class="px-6 py-2.5 rounded-xl bg-[#0062FF] hover:bg-[#0052D4] text-xs font-bold text-white transition-colors">
+            Claim Certificate Credit
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 8. PROJECTS LIBRARY SECTION -->
+    <section id="page-projects" class="page-view hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Enterprise Portfolio</span>
+        <h1 class="text-3xl font-extrabold text-white mt-1">Full-Stack Capstone Project Library</h1>
+        <p class="text-sm text-slate-400 mt-2">Build real-world multi-tier systems with Spring Boot, PostgreSQL, React, and AWS that will make your resume stand out.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projects-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- 9. PROGRESS & ANALYTICS SECTION -->
+    <section id="page-analytics" class="page-view hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8">
+        <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Data &amp; Insights</span>
+        <h1 class="text-3xl font-extrabold text-white mt-1">Learning Analytics & Skill Matrix</h1>
+        <p class="text-sm text-slate-400 mt-1">Detailed breakdown of study hours, quiz mastery, and curriculum progression.</p>
+      </div>
+
+      <!-- Analytics Cards -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        
+        <!-- Left 2 Cols: Weekly Study Activity Chart -->
+        <div class="lg:col-span-2 bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+          <div class="flex items-center justify-between mb-6">
+            <div>
+              <h3 class="text-base font-bold text-white">Weekly Learning Hours</h3>
+              <p class="text-xs text-slate-400">Total this week: 48.5 hours (Average 6.9h/day)</p>
+            </div>
+            <span class="text-xs bg-emerald-500/20 text-emerald-400 font-semibold px-2.5 py-1 rounded-full">+24% vs last week</span>
+          </div>
+
+          <!-- Bar Chart Visualizer -->
+          <div class="h-56 flex items-end justify-between gap-2 sm:gap-4 pt-4 border-b border-[#1E2D52] pb-2">
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="text-[10px] text-slate-400">4.5h</div>
+              <div class="w-full bg-[#1E293B] hover:bg-[#0062FF] rounded-t-lg transition-colors" style="height: 45%"></div>
+              <div class="text-xs text-slate-400 font-medium">Mon</div>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="text-[10px] text-slate-400">6.0h</div>
+              <div class="w-full bg-[#1E293B] hover:bg-[#0062FF] rounded-t-lg transition-colors" style="height: 60%"></div>
+              <div class="text-xs text-slate-400 font-medium">Tue</div>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="text-[10px] text-slate-400">5.5h</div>
+              <div class="w-full bg-[#1E293B] hover:bg-[#0062FF] rounded-t-lg transition-colors" style="height: 55%"></div>
+              <div class="text-xs text-slate-400 font-medium">Wed</div>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="text-[10px] text-slate-400">7.2h</div>
+              <div class="w-full bg-[#1E293B] hover:bg-[#0062FF] rounded-t-lg transition-colors" style="height: 72%"></div>
+              <div class="text-xs text-slate-400 font-medium">Thu</div>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="text-[10px] text-slate-400">6.8h</div>
+              <div class="w-full bg-[#1E293B] hover:bg-[#0062FF] rounded-t-lg transition-colors" style="height: 68%"></div>
+              <div class="text-xs text-slate-400 font-medium">Fri</div>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="text-[10px] text-[#00D4FF] font-bold">9.5h</div>
+              <div class="w-full bg-gradient-to-t from-[#0062FF] to-[#00D4FF] rounded-t-lg shadow-lg" style="height: 95%"></div>
+              <div class="text-xs text-white font-bold">Sat</div>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="text-[10px] text-[#00D4FF] font-bold">9.0h</div>
+              <div class="w-full bg-gradient-to-t from-[#0062FF] to-[#00D4FF] rounded-t-lg shadow-lg" style="height: 90%"></div>
+              <div class="text-xs text-white font-bold">Sun</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 1 Col: Skill Matrix Breakdown -->
+        <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6">
+          <h3 class="text-base font-bold text-white mb-4">Skill Proficiency Matrix</h3>
+          <div class="space-y-4">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">Core Java & OOP Architecture</span>
+                <span class="text-[#00D4FF] font-bold">90%</span>
+              </div>
+              <div class="w-full bg-[#0A1128] h-2 rounded-full overflow-hidden">
+                <div class="bg-[#00D4FF] h-full rounded-full" style="width: 90%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">SQL & Relational Databases</span>
+                <span class="text-[#00D4FF] font-bold">82%</span>
+              </div>
+              <div class="w-full bg-[#0A1128] h-2 rounded-full overflow-hidden">
+                <div class="bg-[#00D4FF] h-full rounded-full" style="width: 82%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">Data Structures in Java</span>
+                <span class="text-[#00D4FF] font-bold">75%</span>
+              </div>
+              <div class="w-full bg-[#0A1128] h-2 rounded-full overflow-hidden">
+                <div class="bg-[#0062FF] h-full rounded-full" style="width: 75%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">Spring Boot 3 REST APIs</span>
+                <span class="text-amber-400 font-bold">60%</span>
+              </div>
+              <div class="w-full bg-[#0A1128] h-2 rounded-full overflow-hidden">
+                <div class="bg-amber-400 h-full rounded-full" style="width: 60%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">React 18 Frontend</span>
+                <span class="text-amber-400 font-bold">55%</span>
+              </div>
+              <div class="w-full bg-[#0A1128] h-2 rounded-full overflow-hidden">
+                <div class="bg-amber-400 h-full rounded-full" style="width: 55%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 10. CERTIFICATES & CREDENTIALS SECTION -->
+    <section id="page-certificates" class="page-view hidden py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <span class="text-xs font-bold text-[#00D4FF] uppercase tracking-wider">Accreditation</span>
+        <h1 class="text-3xl font-extrabold text-white mt-1">Verified Diplomas & Credentials</h1>
+        <p class="text-sm text-slate-400 mt-2">Every certificate is cryptographically signed and includes a public URL for verification on LinkedIn, GitHub, and resumes.</p>
+      </div>
+
+      <!-- Certificate Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto" id="certificates-container">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- 11. PROFILE & SETTINGS SECTION -->
+    <section id="page-profile" class="page-view hidden py-8 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white">Student Profile & Preferences</h1>
+        <p class="text-sm text-slate-400 mt-1">Manage your academic profile, target job roles, and platform settings.</p>
+      </div>
+
+      <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 sm:p-8 space-y-6">
+        
+        <!-- Profile Header -->
+        <div class="flex items-center gap-4 pb-6 border-b border-[#1E2D52]">
+          <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#0062FF] to-[#00D4FF] text-white text-xl font-bold flex items-center justify-center shadow-lg">
+            RS
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Rishabh Sharma</h3>
+            <p class="text-xs text-slate-400">B.Tech Computer Science • Batch of 2026</p>
+            <span class="inline-block mt-1 text-[11px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-semibold">
+              Actively preparing for Java Full Stack placements
+            </span>
+          </div>
+        </div>
+
+        <!-- Settings Form -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Full Legal Name</label>
+            <input type="text" value="Rishabh Sharma" class="w-full bg-[#0A1128] border border-[#1E2D52] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#00D4FF]">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Email Address</label>
+            <input type="email" value="rishabh@example.com" class="w-full bg-[#0A1128] border border-[#1E2D52] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#00D4FF]">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Target Job Role</label>
+            <input type="text" value="Associate Java Full Stack Engineer" class="w-full bg-[#0A1128] border border-[#1E2D52] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#00D4FF]">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">Target Package (LPA)</label>
+            <input type="text" value="12 - 18 LPA" class="w-full bg-[#0A1128] border border-[#1E2D52] rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-[#00D4FF]">
+          </div>
+        </div>
+
+        <!-- Toggles -->
+        <div class="pt-4 border-t border-[#1E2D52] space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-white">Daily Streak Reminders</div>
+              <div class="text-[11px] text-slate-400">Receive gentle nudges to keep your coding streak alive</div>
+            </div>
+            <input type="checkbox" checked class="w-4 h-4 accent-[#00D4FF] rounded">
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs font-bold text-white">Placement Alerts &amp; Hiring Drives</div>
+              <div class="text-[11px] text-slate-400">Get notified when partner companies hire Java Full Stack engineers</div>
+            </div>
+            <input type="checkbox" checked class="w-4 h-4 accent-[#00D4FF] rounded">
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-[#1E2D52] flex justify-end">
+          <button onclick="saveProfile()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#0062FF] to-[#00D4FF] text-white font-bold text-xs shadow transition-all">
+            Save Preferences
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-[#0A1128] border-t border-[#1E2D52] py-12 mt-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        
+        <!-- Brand Info -->
+        <div class="md:col-span-1">
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#0062FF] to-[#00D4FF] flex items-center justify-center text-white font-black text-xs">
+              R
+            </div>
+            <span class="text-base font-extrabold text-white">RishabhInfoTech</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed mb-4">
+            The modern EdTech platform dedicated to transforming college students into industry-grade Java Full Stack engineers.
+          </p>
+          <div class="text-xs text-slate-500 font-mono">
+            &copy; 2026 RishabhInfoTech Inc. All rights reserved.
+          </div>
+        </div>
+
+        <!-- Quick Links: Learning Path -->
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Curriculum Stages</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="javascript:void(0)" onclick="navigateTo('roadmap')" class="hover:text-[#00D4FF]">Core Java & OOP</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('roadmap')" class="hover:text-[#00D4FF]">Spring Boot 3 & REST</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('roadmap')" class="hover:text-[#00D4FF]">Hibernate & SQL</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('roadmap')" class="hover:text-[#00D4FF]">React 18 Full Stack</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('roadmap')" class="hover:text-[#00D4FF]">Interview & Placement Prep</a></li>
+          </ul>
+        </div>
+
+        <!-- Student Experience -->
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Practice & Projects</h4>
+          <ul class="space-y-2 text-xs text-slate-400">
+            <li><a href="javascript:void(0)" onclick="navigateTo('practice')" class="hover:text-[#00D4FF]">Interactive Java IDE</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('projects')" class="hover:text-[#00D4FF]">Capstone Project Hub</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('quiz')" class="hover:text-[#00D4FF]">Skill Assessments</a></li>
+            <li><a href="javascript:void(0)" onclick="navigateTo('certificates')" class="hover:text-[#00D4FF]">Verify Credential</a></li>
+          </ul>
+        </div>
+
+        <!-- Platform Standards -->
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">Enterprise Standards</h4>
+          <p class="text-xs text-slate-400 leading-relaxed mb-3">
+            Built following Clean Architecture, production Spring Boot 3 standards, accessible UI tokens, and industry hiring benchmarks.
+          </p>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#131D38] border border-[#1E2D52] text-[11px] text-emerald-400 font-semibold">
+            <span>●</span> All Systems Operational
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Embedded Curriculum Dataset for 100% Zero-CORS Compatibility (file:// and http://)
+    const ROADMAP_STAGES = [
+      { id: 1, title: "1. Programming Fundamentals", category: "Foundations", tier: "Beginner", duration: "15 Hours", description: "Variables, data types, control structures, operators, loops, and algorithmic problem-solving logic.", skills: ["Flowcharts", "Memory Model", "Data Types", "Conditionals", "Loops"], progress: 100, modules: 4, lessons: 18 },
+      { id: 2, title: "2. Core Java", category: "Java Core", tier: "Beginner", duration: "25 Hours", description: "JVM internal architecture (ClassLoader, Heap, Stack, JIT), bytecode execution, methods, arrays, and memory management.", skills: ["JVM Internals", "JDK vs JRE", "Garbage Collection", "String Pool", "Arrays"], progress: 100, modules: 6, lessons: 24 },
+      { id: 3, title: "3. Object-Oriented Programming (OOP)", category: "Java Core", tier: "Beginner", duration: "30 Hours", description: "Encapsulation, Inheritance, Polymorphism, Abstraction, Interfaces, Abstract Classes, and SOLID principles.", skills: ["Encapsulation", "Inheritance", "Polymorphism", "SOLID", "Composition"], progress: 75, modules: 7, lessons: 28 },
+      { id: 4, title: "4. Java Collections & Generics", category: "Java Core", tier: "Intermediate", duration: "25 Hours", description: "List, Set, Map hierarchies, ArrayList vs LinkedList, HashMap internal hashing mechanism, Comparable & Comparator.", skills: ["List & Set", "HashMap Internals", "Generics", "TreeSet", "Iterators"], progress: 0, modules: 5, lessons: 22 },
+      { id: 5, title: "5. Exception Handling", category: "Java Core", tier: "Intermediate", duration: "12 Hours", description: "Checked vs unchecked exceptions, try-catch-finally, try-with-resources, custom exceptions, and production error handling.", skills: ["Try-Catch-Finally", "Custom Exceptions", "AutoCloseable", "Stack Traces"], progress: 0, modules: 3, lessons: 14 },
+      { id: 6, title: "6. File Handling & I/O Streams", category: "Java Core", tier: "Intermediate", duration: "10 Hours", description: "Byte streams, character streams, BufferedReader/Writer, Java NIO.2, serialization, and JSON file parsing.", skills: ["Byte Streams", "NIO.2", "Serialization", "Jackson Parser"], progress: 0, modules: 3, lessons: 12 },
+      { id: 7, title: "7. Multithreading & Concurrency", category: "Advanced Java", tier: "Intermediate", duration: "22 Hours", description: "Thread lifecycle, synchronization, volatile keyword, locks, ExecutorService, thread pools, and concurrent collections.", skills: ["Threads & Runnable", "Locks & Sync", "ExecutorService", "Deadlocks"], progress: 0, modules: 5, lessons: 20 },
+      { id: 8, title: "8. JDBC (Java Database Connectivity)", category: "Data Layer", tier: "Intermediate", duration: "16 Hours", description: "Connecting Java apps to relational databases, Statements, PreparedStatements, CallableStatements, transaction management, and connection pooling (HikariCP).", skills: ["JDBC Drivers", "PreparedStatement", "ACID Transactions", "HikariCP"], progress: 0, modules: 4, lessons: 16 },
+      { id: 9, title: "9. SQL & Database Fundamentals", category: "Data Layer", tier: "Intermediate", duration: "24 Hours", description: "PostgreSQL & MySQL, DDL/DML, complex joins, subqueries, indexing, execution plans, constraints, and normalization (1NF-3NF).", skills: ["Relational Design", "Complex Joins", "B-Tree Indexing", "Transactions"], progress: 0, modules: 6, lessons: 26 },
+      { id: 10, title: "10. HTML5 & CSS3 Modern Web", category: "Frontend", tier: "Beginner", duration: "18 Hours", description: "Semantic elements, Flexbox, CSS Grid, media queries, accessibility (a11y), animations, and modern responsive layouts.", skills: ["Semantic HTML", "Flexbox & Grid", "Responsive Design", "CSS Variables"], progress: 0, modules: 4, lessons: 18 },
+      { id: 11, title: "11. Modern JavaScript (ES6+)", category: "Frontend", tier: "Intermediate", duration: "26 Hours", description: "DOM manipulation, event loop, arrow functions, destructuring, promises, async/await, fetch API, and closures.", skills: ["ES6 Modules", "Promises & Async", "Event Loop", "Fetch API"], progress: 0, modules: 6, lessons: 24 },
+      { id: 12, title: "12. Git, GitHub & Team Workflows", category: "Dev Tools", tier: "Beginner", duration: "10 Hours", description: "Version control, branching models, pull requests, merge conflict resolution, interactive rebase, and GitHub Actions CI basics.", skills: ["Git Branching", "PR Reviews", "Merge Conflicts", "Git Rebase"], progress: 0, modules: 3, lessons: 12 },
+      { id: 13, title: "13. Spring Framework Core", category: "Enterprise Backend", tier: "Intermediate", duration: "20 Hours", description: "Inversion of Control (IoC), Dependency Injection (DI), Spring Bean lifecycle, ApplicationContext, and Spring AOP.", skills: ["IoC Container", "Dependency Injection", "Bean Scopes", "Spring AOP"], progress: 0, modules: 5, lessons: 20 },
+      { id: 14, title: "14. Spring Boot 3", category: "Enterprise Backend", tier: "Intermediate", duration: "28 Hours", description: "Auto-configuration, Spring Initializr, Starters, application.yml profiles, actuators, logging, and production packaging.", skills: ["Auto-Configuration", "Starters", "Actuator", "Profiles & Config"], progress: 0, modules: 6, lessons: 26 },
+      { id: 15, title: "15. Building Production REST APIs", category: "Enterprise Backend", tier: "Intermediate", duration: "22 Hours", description: "@RestController, HTTP verbs, request/response DTOs, path variables, query params, pagination, and OpenAPI/Swagger documentation.", skills: ["REST Architecture", "DTO Pattern", "Validation (JSR-380)", "Swagger/OpenAPI"], progress: 0, modules: 5, lessons: 22 },
+      { id: 16, title: "16. Hibernate & Spring Data JPA", category: "Data Layer", tier: "Intermediate", duration: "25 Hours", description: "Object-Relational Mapping (ORM), entity lifecycle, relationships (@OneToMany, @ManyToMany), JPQL, criteria queries, caching, and N+1 problem optimization.", skills: ["ORM Mapping", "N+1 Problem Fix", "JPQL & Native Queries", "Auditing"], progress: 0, modules: 6, lessons: 25 },
+      { id: 17, title: "17. Modern Frontend Frameworks (React)", category: "Frontend", tier: "Intermediate", duration: "30 Hours", description: "Component hierarchy, hooks (useState, useEffect, useMemo, useCallback), routing, state management, and API consumption with Axios.", skills: ["React 18 Hooks", "Tailwind CSS", "React Router", "State Management"], progress: 0, modules: 7, lessons: 30 },
+      { id: 18, title: "18. Full-Stack Integration", category: "Full Stack", tier: "Advanced", duration: "20 Hours", description: "CORS configuration, connecting React SPA with Spring Boot backend, error envelope schemas, global exception handling, and toast notifications.", skills: ["CORS Policy", "Axios Interceptors", "API Error Envelopes", "Full-Stack Wiring"], progress: 0, modules: 4, lessons: 18 },
+      { id: 19, title: "19. Authentication & Authorization (Spring Security 6)", category: "Security", tier: "Advanced", duration: "24 Hours", description: "Security filter chains, Stateless JWT generation & validation, refresh tokens, role-based access control (RBAC), and password hashing (BCrypt).", skills: ["Spring Security 6", "JWT Auth", "RBAC", "BCrypt Hashing"], progress: 0, modules: 5, lessons: 22 },
+      { id: 20, title: "20. Testing & Debugging (JUnit 5 & Mockito)", category: "Engineering Quality", tier: "Advanced", duration: "18 Hours", description: "Unit testing with JUnit 5, mocking dependencies with Mockito, integration testing with @SpringBootTest and Testcontainers, and test-driven development.", skills: ["JUnit 5", "Mockito Mocking", "Testcontainers", "Integration Tests"], progress: 0, modules: 4, lessons: 18 },
+      { id: 21, title: "21. Deployment & Basic DevOps", category: "DevOps", tier: "Advanced", duration: "20 Hours", description: "Multi-stage Docker builds, docker-compose for local services, CI/CD pipeline setup with GitHub Actions, AWS EC2 deployment, and cloud databases.", skills: ["Docker Containers", "Docker Compose", "GitHub Actions CI", "AWS EC2 & RDS"], progress: 0, modules: 5, lessons: 20 },
+      { id: 22, title: "22. Real-World Full-Stack Capstone Projects", category: "Capstone", tier: "Advanced", duration: "45 Hours", description: "Building production-grade multi-tier enterprise systems: E-Commerce, Course Management LMS, and Microservices Payment Gateway with live deployment.", skills: ["System Architecture", "Payment Gateway", "Clean Code", "Live Deployment"], progress: 0, modules: 6, lessons: 35 },
+      { id: 23, title: "23. Interview & Placement Preparation", category: "Career", tier: "Job Ready", duration: "30 Hours", description: "DSA in Java, top 100 Java/Spring interview questions, system design fundamentals, resume building, mock technical interviews, and HR prep.", skills: ["Java DSA", "System Design Basics", "Mock Interviews", "Resume Reviews"], progress: 0, modules: 6, lessons: 28 }
+    ];
+
+    const COURSES = [
+      {
+        id: "course-java-core",
+        title: "Java Full Stack Developer Masterclass: Zero to Job Ready",
+        tagline: "The definitive career roadmap from Java fundamentals to Spring Boot microservices and React.",
+        level: "Beginner to Advanced",
+        duration: "120 Hours",
+        rating: 4.9,
+        enrolledCount: "14,820",
+        instructor: { name: "Er. Rishabh Verma", role: "Lead Systems Architect & Ex-FAANG Mentor", avatar: "RV" },
+        modules: [
+          {
+            id: "mod-1",
+            title: "Module 1: Programming Fundamentals & JVM Internals",
+            lessonsCount: 18,
+            duration: "15 Hours",
+            completedCount: 18,
+            lessons: [
+              { id: "les-101", title: "Introduction to Java Architecture & JVM Ecosystem", duration: "18m", completed: true },
+              { id: "les-102", title: "Variables, Primitive Types & Memory Stack Allocation", duration: "24m", completed: true },
+              { id: "les-103", title: "Control Flow: Conditionals, Loops & Pattern Programs", duration: "32m", completed: true },
+              { id: "les-104", title: "Arrays, Memory References & Heap Allocation", duration: "28m", completed: true }
+            ]
+          },
+          {
+            id: "mod-2",
+            title: "Module 2: Object-Oriented Programming (OOP) Deep Dive",
+            lessonsCount: 28,
+            duration: "30 Hours",
+            completedCount: 21,
+            lessons: [
+              { id: "les-201", title: "Classes, Objects & Constructors in Depth", duration: "26m", completed: true },
+              { id: "les-202", title: "Encapsulation & Access Modifiers (public, private, protected)", duration: "30m", completed: true },
+              { id: "les-203", title: "Inheritance, super keyword & Method Overriding", duration: "35m", completed: true },
+              { id: "les-204", title: "Polymorphism: Compile-Time vs Runtime Dynamic Dispatch", duration: "42m", completed: false, isCurrent: true },
+              { id: "les-205", title: "Abstract Classes vs Interfaces & Java 8 Default Methods", duration: "38m", completed: false },
+              { id: "les-206", title: "Applying SOLID Design Principles in Real Code", duration: "45m", completed: false }
+            ]
+          },
+          {
+            id: "mod-3",
+            title: "Module 3: Java Collections Framework & Generics",
+            lessonsCount: 22,
+            duration: "25 Hours",
+            completedCount: 0,
+            lessons: [
+              { id: "les-301", title: "Collection Hierarchy & Generics Type Safety", duration: "25m", completed: false },
+              { id: "les-302", title: "List Interface: ArrayList vs LinkedList Performance", duration: "32m", completed: false },
+              { id: "les-303", title: "HashMap Internals: Hash Codes, Buckets & Collision Resolution", duration: "45m", completed: false },
+              { id: "les-304", title: "Set Implementations: HashSet, LinkedHashSet & TreeSet", duration: "28m", completed: false }
+            ]
+          },
+          {
+            id: "mod-4",
+            title: "Module 4: Spring Boot 3 & Enterprise REST APIs",
+            lessonsCount: 26,
+            duration: "28 Hours",
+            completedCount: 0,
+            lessons: [
+              { id: "les-401", title: "Spring Initializr & Anatomy of a Spring Boot Application", duration: "22m", completed: false },
+              { id: "les-402", title: "Dependency Injection & Bean Lifecycle in Spring", duration: "36m", completed: false },
+              { id: "les-403", title: "Building RESTful Endpoints with @RestController & DTOs", duration: "40m", completed: false }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const CODING_PRACTICE = {
+      id: "prob-101",
+      title: "Filter High-Value Orders Using Java Streams",
+      starterCode: `import java.util.*;\nimport java.util.stream.Collectors;\n\npublic class Solution {\n    public static class Order {\n        int orderId;\n        String customerName;\n        double amount;\n\n        public Order(int id, String name, double amt) {\n            this.orderId = id;\n            this.customerName = name;\n            this.amount = amt;\n        }\n    }\n\n    public static List<String> getPremiumCustomerNames(List<Order> orders, double minAmount) {\n        if (orders == null || orders.isEmpty()) {\n            return Collections.emptyList();\n        }\n\n        // TODO: Implement using Java 8 Stream API\n        return orders.stream()\n            .filter(o -> o.amount >= minAmount)\n            .map(o -> o.customerName)\n            .distinct()\n            .sorted()\n            .collect(Collectors.toList());\n    }\n\n    public static void main(String[] args) {\n        List<Order> sampleOrders = Arrays.asList(\n            new Order(101, "Aarav", 4500.0),\n            new Order(102, "Priya", 12000.0),\n            new Order(103, "Rohan", 8900.0),\n            new Order(104, "Aarav", 15000.0),\n            new Order(105, "Sneha", 2500.0)\n        );\n\n        List<String> result = getPremiumCustomerNames(sampleOrders, 5000.0);\n        System.out.println("Output: " + result);\n    }\n}`
+    };
+
+    const QUIZ_DATA = {
+      questions: [
+        {
+          id: 1,
+          question: "Which of the following is TRUE regarding Dynamic Method Dispatch in Java?",
+          options: [
+            "It determines method calls at compile time based on the reference type.",
+            "It resolves overridden methods at runtime based on the actual object created in heap memory.",
+            "It allows static methods to be dynamically bound during program execution.",
+            "It requires all methods in the parent class to be marked abstract."
+          ],
+          correctIndex: 1,
+          explanation: "Dynamic Method Dispatch is the mechanism by which a call to an overridden method is resolved at runtime rather than compile time. The JVM inspects the runtime object instance via its virtual method table (vtable)."
+        },
+        {
+          id: 2,
+          question: "In Spring Boot, what is the primary difference between @Controller and @RestController?",
+          options: [
+            "@RestController automatically annotates all methods with @ResponseBody, returning serialized JSON/XML rather than view templates.",
+            "@Controller is asynchronous, whereas @RestController is synchronous.",
+            "@RestController cannot handle HTTP POST requests.",
+            "@Controller only works with PostgreSQL databases."
+          ],
+          correctIndex: 0,
+          explanation: "@RestController is a convenience annotation combining @Controller and @ResponseBody. It instructs Spring to serialize return objects directly into HTTP response bodies (JSON/XML)."
+        },
+        {
+          id: 3,
+          question: "What problem does FetchType.LAZY configuration in Hibernate/JPA solve, and what is its primary caveat?",
+          options: [
+            "It prevents database deadlocks, but prevents any child records from ever being read.",
+            "It delays child entity loading until accessed to avoid memory bloat, but may trigger the N+1 select problem if unoptimized.",
+            "It speeds up INSERT operations by ignoring foreign key constraints completely.",
+            "It forces all entity queries to run through Redis cache automatically."
+          ],
+          correctIndex: 1,
+          explanation: "Lazy loading defers query execution until the related association is accessed, saving memory. However, iterating through entities with lazy associations without JOIN FETCH causes the N+1 query problem."
+        },
+        {
+          id: 4,
+          question: "Why should you use PreparedStatement instead of Statement in JDBC?",
+          options: [
+            "PreparedStatement is pre-compiled, improves performance on repeated queries, and defends against SQL Injection attacks.",
+            "PreparedStatement avoids having to provide database credentials.",
+            "Statement does not support SELECT queries.",
+            "PreparedStatement converts all SQL queries to NoSQL documents."
+          ],
+          correctIndex: 0,
+          explanation: "PreparedStatement automatically sanitizes parameters by treating input strictly as literals rather than executable SQL, protecting against SQL injection, while pre-compiling the execution plan."
+        },
+        {
+          id: 5,
+          question: "In Java Collections, what happens internally when two distinct keys yield the same hash code in a HashMap (Java 8+)?",
+          options: [
+            "The second key overwrites the first key immediately.",
+            "An unchecked HashCollisionException is thrown by the JVM.",
+            "The entries are stored in a linked list bucket, which converts into a Red-Black Tree once bucket size exceeds 8 (TREEIFY_THRESHOLD).",
+            "The HashMap resets its capacity to double and discards existing entries."
+          ],
+          correctIndex: 2,
+          explanation: "In Java 8+, hash collisions are handled via separate chaining in linked list buckets. When a bucket reaches 8 elements and table capacity is at least 64, it treeifies into a self-balancing Red-Black Tree (O(log n) lookup)."
+        }
+      ]
+    };
+
+    const PROJECTS = [
+      {
+        id: "proj-1",
+        title: "Enterprise Banking & Transaction Management System",
+        tier: "Beginner",
+        category: "Core Java & JDBC",
+        duration: "15 Hours",
+        skills: ["OOP Design", "JDBC", "PostgreSQL", "ACID Transactions", "HikariCP"],
+        description: "A secure console and database-backed banking platform supporting account creation, ledger entries, money transfers with rollback on failure, and statement generation.",
+        highlights: ["Thread-safe balance updates", "Custom business exceptions", "Database connection pool integration"]
+      },
+      {
+        id: "proj-2",
+        title: "E-Commerce REST Microservices Platform",
+        tier: "Intermediate",
+        category: "Spring Boot & JPA",
+        duration: "35 Hours",
+        skills: ["Spring Boot 3", "Spring Data JPA", "PostgreSQL", "JWT Auth", "Swagger"],
+        description: "Production-grade backend service with product catalog, cart management, checkout with discount coupons, order status state machine, and OpenAPI documentation.",
+        highlights: ["Stateless JWT authorization", "N+1 query optimization with JOIN FETCH", "Pagination and multi-attribute filtering"]
+      },
+      {
+        id: "proj-3",
+        title: "Rishabh LMS: Full-Stack Learning Management System",
+        tier: "Advanced",
+        category: "Full Stack (Spring + React)",
+        duration: "50 Hours",
+        skills: ["React 18", "Spring Boot", "Spring Security 6", "Docker", "Tailwind CSS"],
+        description: "End-to-end commercial EdTech platform featuring video course streaming, interactive quizzes, automated code evaluation runner, and dynamic PDF certificate generation.",
+        highlights: ["React Hooks state management", "Role-Based Access Control (Student vs Instructor)", "Docker multi-stage container deployment"]
+      },
+      {
+        id: "proj-4",
+        title: "Distributed Payment Gateway with Stripe Webhooks",
+        tier: "Advanced",
+        category: "Enterprise System",
+        duration: "40 Hours",
+        skills: ["Spring Boot", "Kafka / Event Queue", "Stripe API", "Redis", "Resilience4j"],
+        description: "Resilient financial transaction engine implementing idempotent payment handling, webhook verification, circuit breakers, and distributed rate limiting with Redis.",
+        highlights: ["Idempotency keys prevention of duplicate charges", "Circuit breaker fallback mechanism", "Event-driven asynchronous audit logging"]
+      }
+    ];
+
+    const CERTIFICATES = [
+      {
+        id: "CERT-RIT-2026-8841",
+        courseTitle: "Java Programming Fundamentals & Object-Oriented Architecture",
+        studentName: "Rishabh Sharma",
+        issueDate: "September 15, 2026",
+        credentialId: "RIT-JAVA-CORE-8841",
+        score: "96% Distinction"
+      },
+      {
+        id: "CERT-RIT-2026-9214",
+        courseTitle: "Relational Database Engineering & JDBC Connectivity",
+        studentName: "Rishabh Sharma",
+        issueDate: "September 28, 2026",
+        credentialId: "RIT-DB-JDBC-9214",
+        score: "94% Distinction"
+      }
+    ];
+
+    // Application State
+    const AppState = {
+      currentPage: 'landing',
+      lessonCompleted: false,
+      currentQuizIndex: 0,
+      quizAnswers: {},
+      quizSubmitted: false
+    };
+
+    // Navigation Router
+    window.navigateTo = function(pageId) {
+      document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+      const target = document.getElementById('page-' + pageId);
+      if (target) {
+        target.classList.remove('hidden');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Update Nav Link Highlighting
+      document.querySelectorAll('.nav-link').forEach(btn => {
+        btn.classList.remove('text-[#00D4FF]', 'bg-[#131D38]');
+      });
+      const activeNavBtn = document.getElementById('nav-btn-' + pageId);
+      if (activeNavBtn) {
+        activeNavBtn.classList.add('text-[#00D4FF]', 'bg-[#131D38]');
+      }
+
+      AppState.currentPage = pageId;
+    };
+
+    // Mobile Menu Toggle
+    window.toggleMobileMenu = function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    };
+
+    // Toast Messenger
+    window.showToast = function(msg) {
+      const toast = document.getElementById('toast');
+      const text = document.getElementById('toast-message');
+      text.innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 3000);
+    };
+
+    // 1. RENDER ROADMAP
+    function renderRoadmap(filter = 'all') {
+      const container = document.getElementById('roadmap-container');
+      if (!container) return;
+
+      const filtered = filter === 'all' 
+        ? ROADMAP_STAGES 
+        : ROADMAP_STAGES.filter(s => s.tier.toLowerCase() === filter.toLowerCase());
+
+      container.innerHTML = filtered.map(stage => {
+        const isDone = stage.progress === 100;
+        const isInProgress = stage.progress > 0 && stage.progress < 100;
+        
+        let badgeColor = 'bg-[#1E293B] text-slate-400';
+        if (isDone) badgeColor = 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+        else if (isInProgress) badgeColor = 'bg-[#00D4FF]/20 text-[#00D4FF] border border-[#00D4FF]/30';
+
+        return `
+          <div class="bg-[#131D38] border ${isInProgress ? 'border-[#00D4FF]/60 shadow-lg shadow-[#0062FF]/10' : 'border-[#1E2D52]'} rounded-2xl p-5 flex flex-col justify-between card-hover">
+            <div>
+              <div class="flex items-center justify-between text-xs mb-3">
+                <span class="px-2 py-0.5 rounded font-semibold text-[11px] ${badgeColor}">
+                  ${stage.tier} • ${stage.category}
+                </span>
+                <span class="text-slate-400 font-medium">${stage.duration}</span>
+              </div>
+
+              <h4 class="text-base font-bold text-white mb-2 leading-snug">${stage.title}</h4>
+              <p class="text-xs text-slate-300 leading-relaxed mb-4">${stage.description}</p>
+
+              <div class="flex flex-wrap gap-1.5 mb-4">
+                ${stage.skills.map(sk => `<span class="bg-[#0A1128] text-slate-300 text-[10px] px-2 py-0.5 rounded font-mono">${sk}</span>`).join('')}
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between items-center text-[11px] text-slate-400 mb-1.5">
+                <span>${stage.modules} Modules (${stage.lessons} Lessons)</span>
+                <span class="font-bold text-white">${stage.progress}%</span>
+              </div>
+              <div class="w-full bg-[#0A1128] h-1.5 rounded-full overflow-hidden mb-3">
+                <div class="bg-gradient-to-r from-[#0062FF] to-[#00D4FF] h-full" style="width: ${stage.progress}%"></div>
+              </div>
+              <button onclick="navigateTo('lesson')" class="w-full py-2 rounded-lg ${isInProgress ? 'bg-[#0062FF] text-white' : 'bg-[#1E293B] text-slate-300 hover:text-white'} text-xs font-semibold transition-colors">
+                ${isDone ? 'Review Stage' : (isInProgress ? 'Resume Stage' : 'Start Stage')}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.filterRoadmap = function(tier) {
+      document.querySelectorAll('.roadmap-filter').forEach(btn => {
+        btn.classList.remove('bg-[#0062FF]', 'text-white');
+        btn.classList.add('bg-[#131D38]', 'text-slate-300');
+      });
+      event.target.classList.add('bg-[#0062FF]', 'text-white');
+      event.target.classList.remove('bg-[#131D38]', 'text-slate-300');
+      renderRoadmap(tier);
+    };
+
+    // 2. RENDER COURSE MODULES
+    function renderCourseModules() {
+      const container = document.getElementById('course-modules-list');
+      if (!container) return;
+
+      const course = COURSES[0];
+      container.innerHTML = course.modules.map(mod => `
+        <div class="border border-[#1E2D52] rounded-xl overflow-hidden bg-[#0F172A]">
+          <div class="p-4 bg-[#0A1128] flex items-center justify-between text-xs">
+            <div>
+              <h4 class="font-bold text-white">${mod.title}</h4>
+              <div class="text-[11px] text-slate-400">${mod.lessonsCount} Lessons • ${mod.duration}</div>
+            </div>
+            <span class="text-xs text-[#00D4FF] font-semibold">${mod.completedCount}/${mod.lessonsCount} Completed</span>
+          </div>
+          <div class="p-3 divide-y divide-[#1E2D52]/60">
+            ${mod.lessons.map(les => `
+              <div class="py-2.5 px-2 flex items-center justify-between text-xs hover:bg-[#131D38] rounded-lg transition-colors cursor-pointer" onclick="navigateTo('lesson')">
+                <div class="flex items-center gap-3">
+                  <span class="${les.completed ? 'text-emerald-400' : (les.isCurrent ? 'text-[#00D4FF] font-bold' : 'text-slate-500')}">
+                    ${les.completed ? '✓' : (les.isCurrent ? '▶' : '○')}
+                  </span>
+                  <span class="${les.isCurrent ? 'text-white font-bold' : 'text-slate-300'}">${les.title}</span>
+                </div>
+                <span class="text-[11px] text-slate-500 font-mono">${les.duration}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 3. RENDER PROJECTS
+    function renderProjects() {
+      const container = document.getElementById('projects-container');
+      if (!container) return;
+
+      container.innerHTML = PROJECTS.map(p => `
+        <div class="bg-[#131D38] border border-[#1E2D52] rounded-2xl p-6 flex flex-col justify-between card-hover">
+          <div>
+            <div class="flex items-center justify-between text-xs mb-3">
+              <span class="px-2.5 py-1 rounded bg-[#0062FF]/20 text-[#38BDF8] font-bold text-[11px]">${p.tier} • ${p.category}</span>
+              <span class="text-slate-400 font-medium">Est: ${p.duration}</span>
+            </div>
+
+            <h3 class="text-lg font-bold text-white mb-2">${p.title}</h3>
+            <p class="text-xs text-slate-300 leading-relaxed mb-4">${p.description}</p>
+
+            <div class="mb-4">
+              <div class="text-[11px] font-semibold text-slate-400 mb-1.5">Architecture & Key Features:</div>
+              <ul class="space-y-1 text-xs text-slate-300">
+                ${p.highlights.map(h => `<li class="flex items-center gap-2"><span class="text-[#00D4FF]">•</span><span>${h}</span></li>`).join('')}
+              </ul>
+            </div>
+
+            <div class="flex flex-wrap gap-1.5 mb-6">
+              ${p.skills.map(s => `<span class="bg-[#0A1128] text-[#00D4FF] text-[10px] px-2 py-0.5 rounded font-mono">${s}</span>`).join('')}
+            </div>
+          </div>
+
+          <div class="flex gap-3">
+            <button onclick="showToast('Project workspace initialized in Practice IDE!')" class="flex-1 py-2.5 rounded-xl bg-[#0062FF] hover:bg-[#0052D4] text-white text-xs font-bold transition-colors">
+              Start Project Lab
+            </button>
+            <button onclick="showToast('Opening GitHub Repository spec...')" class="px-4 py-2.5 rounded-xl bg-[#1E293B] hover:bg-[#1E2D52] text-slate-300 text-xs font-semibold border border-[#1E2D52] transition-colors">
+              View Spec
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 4. RENDER CERTIFICATES
+    function renderCertificates() {
+      const container = document.getElementById('certificates-container');
+      if (!container) return;
+
+      container.innerHTML = CERTIFICATES.map(c => `
+        <div class="bg-gradient-to-b from-[#131D38] to-[#0A1128] border-2 border-amber-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Certificate Header -->
+          <div class="flex items-center justify-between border-b border-[#1E2D52] pb-4 mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg font-bold">
+                🏛️
+              </div>
+              <div>
+                <h4 class="text-sm font-extrabold text-white tracking-wide uppercase">RishabhInfoTech Institute</h4>
+                <div class="text-[10px] text-amber-400 font-semibold tracking-wider">OFFICIAL VERIFIED DIPLOMA</div>
+              </div>
+            </div>
+            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full font-bold">Verified</span>
+          </div>
+
+          <!-- Body -->
+          <div class="text-center my-6">
+            <div class="text-[11px] text-slate-400 uppercase tracking-widest mb-1">This Certifies That</div>
+            <h3 class="text-2xl font-black text-white tracking-tight mb-2">${c.studentName}</h3>
+            <div class="text-xs text-slate-300 max-w-sm mx-auto mb-4">has successfully demonstrated professional mastery in</div>
+            <div class="text-sm font-bold text-[#00D4FF]">${c.courseTitle}</div>
+            <div class="text-xs text-amber-400 font-semibold mt-1">Grade: ${c.score}</div>
+          </div>
+
+          <!-- Footer Details -->
+          <div class="border-t border-[#1E2D52] pt-4 mt-6 flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-400 gap-2">
+            <div>
+              <div>Credential ID: <span class="text-white font-mono font-semibold">${c.credentialId}</span></div>
+              <div class="text-[10px]">Issued: ${c.issueDate}</div>
+            </div>
+
+            <div class="flex gap-2">
+              <button onclick="showToast('Verification link copied to clipboard!')" class="px-3 py-1.5 rounded bg-[#1E293B] hover:bg-[#1E2D52] text-xs font-semibold text-slate-200">
+                Share Link
+              </button>
+              <button onclick="showToast('Generating official PDF certificate download...')" class="px-3 py-1.5 rounded bg-[#0062FF] hover:bg-[#0052D4] text-xs font-bold text-white">
+                Download PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // 5. INTERACTIVE CODE RUNNER SIMULATION
+    window.runJavaCode = function() {
+      const btn = document.getElementById('btn-run-code');
+      const consoleOut = document.getElementById('console-output');
+      const execTime = document.getElementById('exec-time');
+
+      btn.disabled = true;
+      btn.innerHTML = `<span>Compiling in JVM...</span>`;
+      consoleOut.innerHTML = `[JVM javac 21.0.2] Compiling Solution.java...\n[JVM java] Executing unit test assertions...`;
+
+      setTimeout(() => {
+        // Simulating passed test suite
+        document.getElementById('tc-status-1').innerHTML = `<span class="text-emerald-400 font-bold">✓ PASSED (14ms)</span>`;
+        document.getElementById('tc-status-2').innerHTML = `<span class="text-emerald-400 font-bold">✓ PASSED (8ms)</span>`;
+        document.getElementById('tc-status-3').innerHTML = `<span class="text-emerald-400 font-bold">✓ PASSED (6ms)</span>`;
+
+        consoleOut.innerHTML = `[SUCCESS] Compilation finished with 0 warnings.\n[TEST 1] input: sampleOrders, 5000.0 => Expected: ['Aarav', 'Priya', 'Rohan'] | Result: ['Aarav', 'Priya', 'Rohan'] (PASS)\n[TEST 2] input: empty / high threshold => Expected: [] | Result: [] (PASS)\n[TEST 3] input: null safe => Expected: [] | Result: [] (PASS)\n\nAll 3/3 Test Suites Passed! +50 XP Awarded to Rishabh Sharma.`;
+        execTime.innerText = `Exec Time: 28ms • Memory: 34.2 MB`;
+
+        btn.disabled = false;
+        btn.innerHTML = `<svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg><span>Run & Test Code</span>`;
+        
+        showToast('🎉 All test cases passed! +50 XP');
+      }, 900);
+    };
+
+    window.resetCodingEditor = function() {
+      document.getElementById('java-code-editor').value = CODING_PRACTICE.starterCode;
+      showToast('Editor code reset to default starter template');
+    };
+
+    window.toggleHints = function() {
+      const panel = document.getElementById('hints-panel');
+      panel.classList.toggle('hidden');
+    };
+
+    // 6. INTERACTIVE QUIZ ENGINE
+    function renderQuizQuestion() {
+      const q = QUIZ_DATA.questions[AppState.currentQuizIndex];
+      document.getElementById('quiz-question-counter').innerText = `Question ${AppState.currentQuizIndex + 1} of ${QUIZ_DATA.questions.length}`;
+      document.getElementById('quiz-progress-bar').style.width = `${((AppState.currentQuizIndex + 1) / QUIZ_DATA.questions.length) * 100}%`;
+      document.getElementById('quiz-question-text').innerText = q.question;
+
+      const optsContainer = document.getElementById('quiz-options-container');
+      const selected = AppState.quizAnswers[q.id];
+
+      optsContainer.innerHTML = q.options.map((opt, idx) => {
+        let btnClass = 'bg-[#0A1128] border-[#1E2D52] text-slate-300 hover:border-[#00D4FF]';
+        if (selected !== undefined) {
+          if (idx === q.correctIndex) {
+            btnClass = 'bg-emerald-500/20 border-emerald-500 text-emerald-300 font-semibold';
+          } else if (idx === selected) {
+            btnClass = 'bg-rose-500/20 border-rose-500 text-rose-300';
+          }
+        }
+
+        return `
+          <button onclick="selectQuizAnswer(${q.id}, ${idx})" class="w-full text-left p-3.5 rounded-xl border text-xs leading-relaxed transition-all flex items-start gap-3 ${btnClass}">
+            <span class="w-5 h-5 rounded-full border border-current flex items-center justify-center font-bold text-[10px] flex-shrink-0 mt-0.5">
+              ${['A', 'B', 'C', 'D'][idx]}
+            </span>
+            <span>${opt}</span>
+          </button>
+        `;
+      }).join('');
+
+      const expBox = document.getElementById('quiz-explanation-box');
+      if (selected !== undefined) {
+        expBox.classList.remove('hidden');
+        document.getElementById('quiz-explanation-text').innerText = q.explanation;
+      } else {
+        expBox.classList.add('hidden');
+      }
+
+      document.getElementById('btn-quiz-prev').disabled = AppState.currentQuizIndex === 0;
+      
+      const nextBtn = document.getElementById('btn-quiz-next');
+      if (AppState.currentQuizIndex === QUIZ_DATA.questions.length - 1) {
+        nextBtn.innerText = 'Finish Assessment →';
+      } else {
+        nextBtn.innerText = 'Next Question →';
+      }
+    }
+
+    window.selectQuizAnswer = function(qId, optIdx) {
+      if (AppState.quizAnswers[qId] !== undefined) return; // already answered
+      AppState.quizAnswers[qId] = optIdx;
+      renderQuizQuestion();
+    };
+
+    window.navigateQuiz = function(delta) {
+      const newIdx = AppState.currentQuizIndex + delta;
+      if (newIdx >= 0 && newIdx < QUIZ_DATA.questions.length) {
+        AppState.currentQuizIndex = newIdx;
+        renderQuizQuestion();
+      } else if (newIdx >= QUIZ_DATA.questions.length) {
+        // Finished Quiz!
+        document.getElementById('quiz-results-container').classList.remove('hidden');
+        document.getElementById('page-quiz').querySelector('.relative').classList.add('hidden');
+      }
+    };
+
+    window.retakeQuiz = function() {
+      AppState.currentQuizIndex = 0;
+      AppState.quizAnswers = {};
+      document.getElementById('quiz-results-container').classList.add('hidden');
+      document.getElementById('page-quiz').querySelector('.relative').classList.remove('hidden');
+      renderQuizQuestion();
+    };
+
+    // 7. LESSON PLAYER ACTIONS
+    window.toggleLessonComplete = function() {
+      AppState.lessonCompleted = !AppState.lessonCompleted;
+      const btn = document.getElementById('btn-complete-lesson');
+      const icon = document.getElementById('lesson-check-icon');
+      const txt = document.getElementById('lesson-check-text');
+
+      if (AppState.lessonCompleted) {
+        btn.classList.add('bg-emerald-500/20', 'border-emerald-500/50', 'text-emerald-300');
+        icon.innerText = '✓';
+        txt.innerText = 'Completed (+25 XP)';
+        showToast('Lesson marked complete! Progress updated to 38%');
+      } else {
+        btn.classList.remove('bg-emerald-500/20', 'border-emerald-500/50', 'text-emerald-300');
+        icon.innerText = '⚪';
+        txt.innerText = 'Mark as Completed';
+      }
+    };
+
+    window.switchLessonTab = function(tabName) {
+      ['notes', 'code', 'resources'].forEach(t => {
+        document.getElementById('tab-btn-' + t).classList.remove('text-[#00D4FF]', 'border-b-2', 'border-[#00D4FF]');
+        document.getElementById('tab-btn-' + t).classList.add('text-slate-400');
+        document.getElementById('tab-content-' + t).classList.add('hidden');
+      });
+
+      const activeBtn = document.getElementById('tab-btn-' + tabName);
+      activeBtn.classList.add('text-[#00D4FF]', 'border-b-2', 'border-[#00D4FF]');
+      activeBtn.classList.remove('text-slate-400');
+      document.getElementById('tab-content-' + tabName).classList.remove('hidden');
+    };
+
+    window.copyLessonCode = function() {
+      const code = document.getElementById('lesson-code-block').innerText;
+      navigator.clipboard.writeText(code);
+      showToast('Java code snippet copied to clipboard!');
+    };
+
+    window.playLessonVideo = function() {
+      showToast('Playing Lesson 204: Polymorphism & JVM Dynamic Dispatch');
+    };
+
+    // 8. PROFILE SETTINGS SAVE
+    window.saveProfile = function() {
+      showToast('Profile and notification preferences saved successfully!');
+    };
+
+    // INITIALIZATION ON LOAD
+    document.addEventListener('DOMContentLoaded', () => {
+      renderRoadmap();
+      renderCourseModules();
+      renderProjects();
+      renderCertificates();
+      renderQuizQuestion();
+      navigateTo('landing');
+    });
+  </script>
+</body>
+</html>
